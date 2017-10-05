@@ -1,4 +1,4 @@
-# embedded_types.rs [![Build Status](https://travis-ci.org/kjetilkjeka/embedded_types.rs.svg?branch=master)](https://travis-ci.org/kjetilkjeka/embedded_types.rs) [![Crates.io](https://img.shields.io/crates/v/embedded_types.svg)](https://crates.io/crates/embedded_types)
+# embedded_types.rs [![Build Status](https://travis-ci.org/kjetilkjeka/embedded-types.rs.svg?branch=master)](https://travis-ci.org/kjetilkjeka/embedded-types.rs) [![Crates.io](https://img.shields.io/crates/v/embedded_types.svg)](https://crates.io/crates/embedded_types)
 
 > Common types when working with embedded/no_std/hw and implementations related to them.
 
