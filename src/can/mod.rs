@@ -39,11 +39,24 @@ pub enum ID{
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct DataFrame {
-    id: ID,
+pub struct BaseDataFrame {
+    id: BaseID,
     dlc: u8,
     data: [u8; 8],
 }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ExtendedDataFrame {
+    id: ExtendedID,
+    dlc: u8,
+    data: [u8; 8],
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DataFrame {
+    BaseDataFrame(BaseDataFrame),
+    ExtendedDataFrame(ExtendedDataFrame),
+}    
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct RemoteFrame {
@@ -51,9 +64,9 @@ pub struct RemoteFrame {
     dlc: u8,
 }
 
-impl DataFrame {
-    pub fn new(id: ID) -> DataFrame {
-        DataFrame{id: id, dlc: 0, data: [0; 8]}
+impl ExtendedDataFrame {
+    pub fn new(id: ExtendedID) -> Self {
+        Self{id: id, dlc: 0, data: [0; 8]}
     }
     
     pub fn set_data_length(&mut self, length: usize) {
@@ -69,8 +82,31 @@ impl DataFrame {
         &mut self.data[0..(self.dlc as usize)]
     }
     
-    pub fn id(&self) -> &ID {
-        &self.id 
+    pub fn id(&self) -> ExtendedID {
+        self.id 
+    }
+}
+
+impl BaseDataFrame {
+    pub fn new(id: BaseID) -> Self {
+        Self{id: id, dlc: 0, data: [0; 8]}
+    }
+    
+    pub fn set_data_length(&mut self, length: usize) {
+        assert!(length <= 8);
+        self.dlc = length as u8;
+    }
+    
+    pub fn data(&self) -> &[u8] {
+        &self.data[0..(self.dlc as usize)]
+    }
+    
+    pub fn data_as_mut(&mut self) -> &mut[u8] {
+        &mut self.data[0..(self.dlc as usize)]
+    }
+    
+    pub fn id(&self) -> BaseID {
+        self.id 
     }
 }
 
@@ -84,7 +120,7 @@ impl RemoteFrame {
         self.dlc = length as u8;
     }
         
-    pub fn id(&self) -> &ID {
-        &self.id 
+    pub fn id(&self) -> ID {
+        self.id 
     }
 }
