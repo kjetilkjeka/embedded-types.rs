@@ -25,6 +25,8 @@ pub fn blocking_receive<F, O>(receive: F) -> Result<O, ReceiveError>
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TransmitError {
     BufferFull,
+    InvalidInput,
+    Other,
 }
 
 /// Common receive errors.
@@ -32,4 +34,5 @@ pub enum TransmitError {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ReceiveError {
     BufferEmpty,
+    Other,
 }
