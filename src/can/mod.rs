@@ -34,7 +34,10 @@ impl From<ExtendedID> for u32 {
 /// A can ID, can either be Extended (29bit CAN2.0B) or Base (normal 11bit CAN2.0A)
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ID{
+    /// ID for CAN2.0A data frames
     BaseID(BaseID),
+    
+    /// ID for CAN2.0B data frames
     ExtendedID(ExtendedID),
 }
 
@@ -54,7 +57,10 @@ pub struct ExtendedDataFrame {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DataFrame {
+    /// A CAN2.0A data frame
     BaseDataFrame(BaseDataFrame),
+    
+    /// A CAN2.0B data frame
     ExtendedDataFrame(ExtendedDataFrame),
 }    
 
