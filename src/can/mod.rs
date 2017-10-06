@@ -1,6 +1,7 @@
 pub struct BaseID(u16);
 pub struct ExtendedID(u32);
 
+/// A can ID, can either be Extended (29bit CAN2.0B) or Base (normal 11bit CAN2.0A)
 pub enum ID{
     BaseID(BaseID),
     ExtendedID(ExtendedID),
