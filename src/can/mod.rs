@@ -1,18 +1,51 @@
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct BaseID(u16);
+
+impl BaseID {
+    pub fn new(id: u16) -> Self {
+        assert_eq!(id & 0xf800, 0);
+        BaseID(id)
+    }
+}
+
+impl From<BaseID> for u16 {
+    fn from(id: BaseID) -> Self {
+        id.0
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct ExtendedID(u32);
 
+impl ExtendedID {
+    pub fn new(id: u32) -> Self {
+        assert_eq!(id & 0xe000_0000, 0);
+        ExtendedID(id)
+    }
+}
+
+impl From<ExtendedID> for u32 {
+    fn from(id: ExtendedID) -> Self {
+        id.0
+    }
+}
+
 /// A can ID, can either be Extended (29bit CAN2.0B) or Base (normal 11bit CAN2.0A)
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ID{
     BaseID(BaseID),
     ExtendedID(ExtendedID),
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct DataFrame {
     id: ID,
     dlc: u8,
     data: [u8; 8],
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct RemoteFrame {
     id: ID,
     dlc: u8,
