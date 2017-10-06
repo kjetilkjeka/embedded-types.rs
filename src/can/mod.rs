@@ -65,10 +65,25 @@ pub enum DataFrame {
 }    
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct RemoteFrame {
-    id: ID,
+pub struct BaseRemoteFrame {
+    id: BaseID,
     dlc: u8,
 }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ExtendedRemoteFrame {
+    id: ExtendedID,
+    dlc: u8,
+}
+
+pub enum RemoteFrame {
+    /// A CAN2.0A remote frame
+    BaseRemoteFrame(BaseRemoteFrame),
+    
+    /// A CAN2.0B remote frame
+    ExtendedRemoteFrame(ExtendedRemoteFrame),
+}
+
 
 impl ExtendedDataFrame {
     pub fn new(id: ExtendedID) -> Self {
@@ -116,9 +131,9 @@ impl BaseDataFrame {
     }
 }
 
-impl RemoteFrame {
-    pub fn new(id: ID) -> RemoteFrame {
-        RemoteFrame{id: id, dlc: 0}
+impl BaseRemoteFrame {
+    pub fn new(id: BaseID) -> Self {
+        Self{id: id, dlc: 0}
     }
     
     pub fn set_data_length(&mut self, length: usize) {
@@ -126,7 +141,22 @@ impl RemoteFrame {
         self.dlc = length as u8;
     }
         
-    pub fn id(&self) -> ID {
+    pub fn id(&self) -> BaseID {
+        self.id 
+    }
+}
+
+impl ExtendedRemoteFrame {
+    pub fn new(id: ExtendedID) -> Self {
+        Self{id: id, dlc: 0}
+    }
+    
+    pub fn set_data_length(&mut self, length: usize) {
+        assert!(length <= 8);
+        self.dlc = length as u8;
+    }
+        
+    pub fn id(&self) -> ExtendedID {
         self.id 
     }
 }
