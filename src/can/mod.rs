@@ -131,6 +131,43 @@ impl BaseDataFrame {
     }
 }
 
+impl DataFrame {
+    pub fn new(id: ID) -> Self {
+        match id {
+            ID::BaseID(id) => DataFrame::BaseDataFrame(BaseDataFrame::new(id)),
+            ID::ExtendedID(id) => DataFrame::ExtendedDataFrame(ExtendedDataFrame::new(id)),
+        }
+    }
+    
+    pub fn set_data_length(&mut self, length: usize) {
+        match *self {
+            DataFrame::BaseDataFrame(ref mut f) => f.set_data_length(length),
+            DataFrame::ExtendedDataFrame(ref mut f) => f.set_data_length(length),
+        }
+    }
+    
+    pub fn data(&self) -> &[u8] {
+        match *self {
+            DataFrame::BaseDataFrame(ref f) => f.data(),
+            DataFrame::ExtendedDataFrame(ref f) => f.data(),
+        }
+    }
+    
+    pub fn data_as_mut(&mut self) -> &mut[u8] {
+        match *self {
+            DataFrame::BaseDataFrame(ref mut f) => f.data_as_mut(),
+            DataFrame::ExtendedDataFrame(ref mut f) => f.data_as_mut(),
+        }
+    }
+     
+    pub fn id(&self) -> ID {
+        match *self {
+            DataFrame::BaseDataFrame(f) => ID::BaseID(f.id()),
+            DataFrame::ExtendedDataFrame(f) => ID::ExtendedID(f.id()),
+        }
+    }
+}
+
 impl BaseRemoteFrame {
     pub fn new(id: BaseID) -> Self {
         Self{id: id, dlc: 0}
