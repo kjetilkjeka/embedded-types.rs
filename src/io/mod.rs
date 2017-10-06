@@ -1,22 +1,36 @@
 /// `blocking_transmit` turns a non-blocking transmit into a blocking transmit
-pub fn blocking_transmit<F, O>(transmit: F) -> Result<O, TransmitError>
-    where F: Fn() -> Result<O, TransmitError> {
+pub fn blocking_transmit<F, O, E>(transmit: F) -> Result<O, E>
+    where F: Fn() -> Result<O, E>,
+          E: Into<TransmitError> + Clone {
     loop {
         match transmit() {
-            Err(TransmitError::BufferFull) => (),
-            x => return x,
+            Err(x) => {
+                if x.clone().into() != TransmitError::BufferFull {
+                    return Err(x);
+                }
+            },
+            Ok(x) => {
+                return Ok(x);
+            },
         }            
     }
 }
 
 /// `blocking_receive` turns a non-blocking receive into a blocking receive
-pub fn blocking_receive<F, O>(receive: F) -> Result<O, ReceiveError>
-    where F: Fn() -> Result<O, ReceiveError> {
+pub fn blocking_receive<F, O, E>(receive: F) -> Result<O, E>
+    where F: Fn() -> Result<O, E>,
+          E: Into<ReceiveError> + Clone {
     loop {
         match receive() {
-            Err(ReceiveError::BufferEmpty) => (),
-            x => return x,
-        }            
+            Err(x) => {
+                if x.clone().into() != ReceiveError::BufferEmpty {
+                    return Err(x);
+                }
+            },
+            Ok(x) => {
+                return Ok(x);
+            },
+        }                        
     }
 }
 
