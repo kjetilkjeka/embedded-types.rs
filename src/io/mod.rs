@@ -22,14 +22,14 @@ pub fn blocking_receive<F, O>(receive: F) -> Result<O, ReceiveError>
 
 /// Common transmit errors.
 /// This list is intended to grow over time and it is not recommended to exhaustively match against it.
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TransmitError {
     BufferFull,
 }
 
 /// Common receive errors.
 /// This list is intended to grow over time and it is not recommended to exhaustively match against it.
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ReceiveError {
     BufferEmpty,
 }
