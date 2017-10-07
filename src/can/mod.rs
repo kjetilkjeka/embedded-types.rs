@@ -198,6 +198,22 @@ impl ExtendedRemoteFrame {
     }
 }
 
+impl RemoteFrame {
+    pub fn new(id: ID) -> Self {
+        match id {
+            ID::BaseID(id) => RemoteFrame::BaseRemoteFrame(BaseRemoteFrame::new(id)),
+            ID::ExtendedID(id) => RemoteFrame::ExtendedRemoteFrame(ExtendedRemoteFrame::new(id)),
+        }
+    }
+    
+    pub fn id(&self) -> ID {
+        match *self {
+            RemoteFrame::BaseRemoteFrame(f) => ID::BaseID(f.id()),
+            RemoteFrame::ExtendedRemoteFrame(f) => ID::ExtendedID(f.id()),
+        }
+    }
+}
+
 pub enum CanFrame {
     DataFrame(DataFrame),
     RemoteFrame(RemoteFrame),
