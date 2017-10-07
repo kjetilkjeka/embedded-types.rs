@@ -197,3 +197,70 @@ impl ExtendedRemoteFrame {
         self.id 
     }
 }
+
+pub enum CanFrame {
+    DataFrame(DataFrame),
+    RemoteFrame(RemoteFrame),
+}
+
+// Conversion between these types
+
+impl From<DataFrame> for CanFrame {
+    fn from(f: DataFrame) -> CanFrame {
+        CanFrame::DataFrame(f)
+    }
+}
+
+impl From<RemoteFrame> for CanFrame {
+    fn from(f: RemoteFrame) -> CanFrame {
+        CanFrame::RemoteFrame(f)
+    }
+}
+
+impl From<BaseDataFrame> for DataFrame {
+    fn from(f: BaseDataFrame) -> DataFrame {
+        DataFrame::BaseDataFrame(f)
+    }
+}
+
+impl From<ExtendedDataFrame> for DataFrame {
+    fn from(f: ExtendedDataFrame) -> DataFrame {
+        DataFrame::ExtendedDataFrame(f)
+    }
+}
+
+impl From<BaseRemoteFrame> for RemoteFrame {
+    fn from(f: BaseRemoteFrame) -> RemoteFrame {
+        RemoteFrame::BaseRemoteFrame(f)
+    }
+}
+
+impl From<ExtendedRemoteFrame> for RemoteFrame {
+    fn from(f: ExtendedRemoteFrame) -> RemoteFrame {
+        RemoteFrame::ExtendedRemoteFrame(f)
+    }
+}
+
+impl From<BaseDataFrame> for CanFrame {
+    fn from(f: BaseDataFrame) -> CanFrame {
+        CanFrame::from(DataFrame::from(f))
+    }
+}
+
+impl From<ExtendedDataFrame> for CanFrame {
+    fn from(f: ExtendedDataFrame) -> CanFrame {
+        CanFrame::from(DataFrame::from(f))
+    }
+}
+
+impl From<BaseRemoteFrame> for CanFrame {
+    fn from(f: BaseRemoteFrame) -> CanFrame {
+        CanFrame::from(RemoteFrame::from(f))
+    }
+}
+
+impl From<ExtendedRemoteFrame> for CanFrame {
+    fn from(f: ExtendedRemoteFrame) -> CanFrame {
+        CanFrame::from(RemoteFrame::from(f))
+    }
+}
