@@ -219,6 +219,16 @@ pub enum CanFrame {
     RemoteFrame(RemoteFrame),
 }
 
+impl CanFrame {
+    pub fn id(&self) -> ID {
+        match *self {
+            CanFrame::DataFrame(ref f) => f.id(),
+            CanFrame::RemoteFrame(ref f) => f.id(),
+        }
+    }
+}
+
+
 // Conversion between these types
 
 impl From<DataFrame> for CanFrame {
