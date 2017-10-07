@@ -41,6 +41,15 @@ pub enum ID{
     ExtendedID(ExtendedID),
 }
 
+impl From<ID> for u32 {
+    fn from(id: ID) -> Self {
+        match id {
+            ID::BaseID(x) => u16::from(x) as u32,
+            ID::ExtendedID(x) => u32::from(x),
+        }
+    }    
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct BaseDataFrame {
     id: BaseID,
