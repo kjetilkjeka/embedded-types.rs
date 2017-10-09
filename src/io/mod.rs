@@ -1,11 +1,11 @@
-/// `blocking_transmit` turns a non-blocking transmit into a blocking transmit
-pub fn blocking_transmit<F, O, E>(transmit: F) -> Result<O, E>
+/// `blocking` turns a non-blocking transmit/receive into a blocking transmit/receive
+pub fn blocking<F, O, E>(non_blocking: F) -> Result<O, E>
     where F: Fn() -> Result<O, E>,
-          E: Into<TransmitError> + Clone {
+          E: Into<Error> + Clone {
     loop {
-        match transmit() {
+        match non_blocking() {
             Err(x) => {
-                if x.clone().into() != TransmitError::BufferFull {
+                if x.clone().into() != Error::BufferExhausted {
                     return Err(x);
                 }
             },
@@ -16,37 +16,13 @@ pub fn blocking_transmit<F, O, E>(transmit: F) -> Result<O, E>
     }
 }
 
-/// `blocking_receive` turns a non-blocking receive into a blocking receive
-pub fn blocking_receive<F, O, E>(receive: F) -> Result<O, E>
-    where F: Fn() -> Result<O, E>,
-          E: Into<ReceiveError> + Clone {
-    loop {
-        match receive() {
-            Err(x) => {
-                if x.clone().into() != ReceiveError::BufferEmpty {
-                    return Err(x);
-                }
-            },
-            Ok(x) => {
-                return Ok(x);
-            },
-        }                        
-    }
-}
-
-/// Common transmit errors.
-/// This list is intended to grow over time and it is not recommended to exhaustively match against it.
+/// Common transmit/receive errors
+/// This list is intended to grow over time and it is not recommended to exhaustively match against it
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum TransmitError {
-    BufferFull,
+    pub enum Error {
+    
+    /// In case of transmissions: Buffer full. In case of reception: Buffer empty
+    BufferExhausted,
     InvalidInput,
-    Other,
-}
-
-/// Common receive errors.
-/// This list is intended to grow over time and it is not recommended to exhaustively match against it.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ReceiveError {
-    BufferEmpty,
     Other,
 }
