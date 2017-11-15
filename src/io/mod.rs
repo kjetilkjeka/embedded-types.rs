@@ -43,14 +43,22 @@ pub trait Write {
     ///This function will attempt to write the entire contents of buf, but the entire write may not succeed, or the write may also generate an error. A call to write represents at most one attempt to write to any wrapped object.
     fn write(&mut self, buf: &[u8]) -> Result<usize>;
 
-    fn write_str(&mut self, s: &str) -> Result<()> {
-        let num_bytes = self.write(s.as_bytes())?;
-
-        if num_bytes < s.len() {
-            Err(Error::BufferExhausted)
-        } else {
-            Ok(())
+    /// Attempts to write an entire buffer into this write.
+    ///
+    /// This method will continously call write untill there is no more data or an error of non `Error::BufferExhausted` kind is returned.
+    fn write_all(&mut self, buf: &[u8]) -> Result<()> {
+        let mut bytes_written = 0;
+        while bytes_written < buf.len() {
+            match self.write(&buf[bytes_written..]) {
+                Ok(n) => bytes_written += n,
+                Err(e) => return Err(e),
+            }
         }
+        Ok(())
+    }
+
+    fn write_str(&mut self, s: &str) -> Result<()> {
+        self.write_all(s.as_bytes())
     }
     
     #[allow(unused_must_use)]
