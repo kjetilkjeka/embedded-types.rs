@@ -1,3 +1,5 @@
+//! Traits, helpers and type definitions for embedded/no_std I/O functionality.
+
 use core::fmt;
 use core::result;
 
@@ -22,12 +24,12 @@ pub fn blocking<F, O, E>(non_blocking: F) -> result::Result<O, E>
 /// A specialized `Result` type for embedded I/O operations.
 pub type Result<T> = result::Result<T, Error>;
 
-/// Common transmit/receive errors
-/// This list is intended to grow over time and it is not recommended to exhaustively match against it
+/// Common transmit/receive errors.
+/// This list is intended to grow over time and it is not recommended to exhaustively match against it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Error {
     
-    /// In case of transmissions: Buffer full. In case of reception: Buffer empty
+    /// In case of transmissions: Buffer full. In case of reception: Buffer empty.
     BufferExhausted,
     InvalidInput,
     Other,
