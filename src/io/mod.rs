@@ -20,7 +20,7 @@ pub fn blocking<F, O, E>(non_blocking: F) -> result::Result<O, E>
 }
 
 /// A specialized `Result` type for embedded I/O operations.
-type Result<T> = result::Result<T, Error>;
+pub type Result<T> = result::Result<T, Error>;
 
 /// Common transmit/receive errors
 /// This list is intended to grow over time and it is not recommended to exhaustively match against it
