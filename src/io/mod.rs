@@ -51,6 +51,7 @@ pub trait Write {
         while bytes_written < buf.len() {
             match self.write(&buf[bytes_written..]) {
                 Ok(n) => bytes_written += n,
+                Err(Error::BufferExhausted) => (),
                 Err(e) => return Err(e),
             }
         }
