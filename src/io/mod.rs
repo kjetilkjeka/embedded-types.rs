@@ -56,11 +56,15 @@ pub trait Write {
         }
         Ok(())
     }
-
+    
+    /// Attempts to write a str into this write.
+    ///
+    /// This method will continously call write untill there is no more data or an error of non `Error::BufferExhausted` kind is returned.
     fn write_str(&mut self, s: &str) -> Result<()> {
         self.write_all(s.as_bytes())
     }
-    
+
+    /// Writes a formatted string into this writer, returning any error encountered.
     #[allow(unused_must_use)]
     fn write_fmt(&mut self, args: fmt::Arguments) -> Result<()> {
         // This Adapter is needed to allow `self` (of type `&mut
