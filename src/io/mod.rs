@@ -108,6 +108,29 @@ pub trait Write {
     }
 }
 
+/// The `Read` trait allows for reading bytes from a source.
+///
+/// Implementors of the `Read` trait are called 'readers'.
+///
+/// This is very similar to the standard library's `io::Read`.
+/// This trait is intended to be implemented for custom types used in no_std development.
+pub trait Read {
+    /// Read all bytes into buf until the delimiter byte or EOF is reached.
+    ///
+    /// This function will read bytes from the underlying stream until the buffer is full, delimiter is found or EOF is found.
+    ///
+    /// If the return value of this method is `Ok(n)` then it must be guaranteed that `0 >= n <= buf.len()`.
+    /// A nonzero `n` value indicates that the buffer `buf` has been fieeld in with `n` bytes of data from this source.
+    /// If `n` is 0, then it can indicate one of two scenarios:
+    ///
+    /// 1. This reader has reached its "end of file" and will likely no longer be able to produce bytes. Note that this does not mean that the reader will always no longer be able to produce bytes.
+    /// 2. The buffer specified was 0 bytes in length.
+    ///
+    /// No guarantees are provided about the contents of buf when this function is called, implementations cannot rely on any property of the contents of buf being true.
+    /// It is recommended that implementations only write data to buf instead of reading its contents.
+    fn read_until(&mut self, byte: u8, buf: &mut [u8]) -> Result<usize>;
+}
+
 #[cfg(test)]
 mod tests {
 
