@@ -32,6 +32,10 @@ pub enum Error {
     /// In case of transmissions: Buffer full. In case of reception: Buffer empty.
     BufferExhausted,
     InvalidInput,
+
+    /// A reception can fail with this error if it's grounded in the parity checking, CRC calculation or similar.
+    ErrorDetectionCode,
+    
     Other,
 }
 
