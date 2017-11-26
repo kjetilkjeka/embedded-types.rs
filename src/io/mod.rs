@@ -119,8 +119,6 @@ pub trait Write {
 /// This is very similar to the standard library's `io::Read`.
 /// This trait is intended to be implemented for custom types used in no_std development.
 pub trait Read {
-    /// Read all bytes into buf until the delimiter byte or EOF is reached.
-    ///
     /// This function will read bytes from the underlying stream until the buffer is full, delimiter is found or EOF is found.
     ///
     /// If the return value of this method is `Ok(n)` then it must be guaranteed that `0 >= n <= buf.len()`.
